@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.it.herb.admin.model.ManagerDAO">
+	<select id="selectAuthority" resultType="map">
+		select * from authority
+	</select>
+	
+	<insert id="insertManager" parameterType="ManagerVo">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select managers_seq.nextval from dual
+		</selectKey>
+		insert into managers(no, userid, name, pwd, authCode)
+		values(#{no}, #{userid}, #{name}, #{pwd}, #{authCode})
+	</insert>
+	
+	<select id="selectDup" parameterType="string" resultType="int">
+		select count(*) from managers
+		where userid=#{userid}
+	</select>
+	
+	<select id="selectPwd" parameterType="String" resultType="String">
+		select pwd from managers
+		where userid=#{userid}
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+

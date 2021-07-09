@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.it.herb.member.model.MemberDAO">
+	<insert id="insertMember" parameterType="memberVo">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select member2_seq.nextval from dual
+		</selectKey>
+		insert into member2(no, userid, pwd, name, hp1, hp2, hp3, email1, email2,
+			zipcode, address, addressDetail)
+		values(#{no}, #{userid}, #{pwd}, #{name}, #{hp1}, #{hp2}, #{hp3}, #{email1}, #{email2},
+			#{zipcode}, #{address}, #{addressDetail})
+	</insert>
+	
+	<select id="checkDuplicate" parameterType="String" resultType="int">
+		select count(*) from Member2 
+		where userid=#{userid}
+	</select>
+	
+	<select id="selectPwd" parameterType="String" resultType="String">
+		select pwd from Member2
+		where userid=#{userid} and outdate is null
+	</select>
+	
+	<select id="selectByUserid" parameterType="String" resultType="memberVo">
+		select * from member2 where userid=#{userid}
+	</select>
+	
+	<update id="updateMember" parameterType="memberVo">
+		update member2
+		set email1=#{email1},email2=#{email2}, hp1=#{hp1}, hp2=#{hp2}, hp3=#{hp3}, 
+		address=#{address}, addressDetail=#{addressDetail},
+		zipcode=#{zipcode}
+		where userid=#{userid}
+	</update>
+	
+	<update id="withdrawMember" parameterType="String">
+		update member2
+		set outdate=sysdate
+		where userid=#{userid}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+

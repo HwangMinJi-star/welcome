@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.it.herb.product.model.ProductDAO">
+	<select id="selectProductByEvent" parameterType="String"
+		resultType="productVo">
+		select * from eventproductview
+		where eventName=#{eventName}
+	</select>
+	
+	<select id="selectProductByNO" parameterType="int"
+		resultType="productVo">
+		select * from products 
+		where productNo=#{productNo}
+	</select>
+	
+	<select id="selectProductByCategory" parameterType="int" resultType="productVo">
+		select * from products
+		where categoryNo=#{categoryNo}
+	</select>
+	
+	<insert id="insertProduct" parameterType="productVo">
+		<selectKey keyProperty="productNo" resultType="int" order="BEFORE">
+			select products_seq.nextval from dual
+		</selectKey>
+			insert into products(ProductNo, categoryNo, productname, sellprice, company,
+			imageurl, explains, description, Mileage)
+			values(#{productNo}, #{categoryNo}, #{productName}, #{sellPrice}, #{company},
+			#{imageUrl}, #{explains}, #{description}, #{mileage})
+	</insert>
+	
+	<select id="selectAll" parameterType="eventProductVo" resultType="productVo">
+		select *
+		from
+		(
+		    select rownum as RNUM,A.*
+		    from
+		    (
+		    	<if test="eventName==null or eventName==''">
+		        	select * from products order by productno desc
+		        </if>
+		        <if test="eventName!=null and eventName!=''">
+		        	select * from eventproductview
+					where eventName=#{eventName}
+				</if>
+		    )A
+		)
+		<![CDATA[
+		where RNUM > #{firstRecordIndex} 
+		and RNUM <= #{firstRecordIndex} + #{recordCountPerPage}
+		]]>
+	</select>
+	
+	<select id="selectTotalRecord" parameterType="eventProductVo"
+		resultType="int">
+		<if test="eventName==null or eventName==''">
+			select count(*) from products
+		</if>
+		<if test="eventName!=null and eventName!=''">
+		    select count(*) from eventproductview
+			where eventName=#{eventName}
+		</if>
+		
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
