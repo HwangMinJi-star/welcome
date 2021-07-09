@@ -12,7 +12,10 @@ public class HelloController {
 	@GetMapping("/hello")
 	public String hello(Model model) {
 		model.addAttribute("name", "홍길동");
-		//팀장이 주설달다
+
+		//팀장, hong이 주설달다
+
+
 		return "hello"; //=> templates/hello.html 
 	}
 	
